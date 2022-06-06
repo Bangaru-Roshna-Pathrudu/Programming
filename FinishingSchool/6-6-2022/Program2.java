@@ -1,45 +1,63 @@
 /*
-There are N Trees planted on flat land at various positions along X-Axis.
-You are given the X-Axis poistions of the trees in ascending order.
-Mr Bilahari wants to setup a water irrigation system for T trees which are 
-near to point-X.
+There are N tourist places in India, where some are connected with each other 
+through Airways and some or not. You will be given the Airways as routes[] array, 
+where routes[i]=[X,Y], there is an direct airway route between place-X to place-Y 
+and vice versa.
 
-Your task is to find and return the positions of the T nearest trees to point-X.
-and answer should be ascending order. To find the nearest positions of trees to 
-point-X, the rule is as follows:
-	- if there are two trees at posistions X1 and X2 then
-	- [ |X1 - X| < |X2 - X| ] OR [ (|X1 - X| == |X2 - X| ) and X1 < X2 ]
-	
+Reachability Score of two tourist places is defined as the total number of direct 
+airway routes to any tourist place. If there is a common airway route between both
+the tourist places, it is counted only once.
+
+Your task is to find and return the maximum reachability score between any pair 
+of tourist places among the N tourist places in INDIA.
 
 Input Format:
 -------------
-Line-1: 3 space separated integers N, T, X, number of trees, values of T and X.
-Line-2: N space separated integers, posistions of the trees.
+Line-1:Two space separated integers, N number of places, and R number of routes.
+Next R lines: Two space separated integers, X and Y. 
 
 Output Format:
 --------------
-Print the list of the posistions of T trees near to point-X.
+Print an integer, maximum reachability score.
 
 
 Sample Input-1:
 ---------------
-6 3 7
-1 4 5 7 9 10 
+5 6
+0 1
+1 2
+0 4
+1 4
+2 4
+3 4
 
 Sample Output-1:
 ----------------
-[5, 7, 9]
+6
 
+Explanation:
+------------
+The Reachability Score of the tourist places place-1 is 3 and place-4 is 4 .
+There is a common route between place-1 and place-4,
+So, the maximum reachability score is 3+4-1 = 6.
 
 
 Sample Input-2:
 ---------------
-6 4 2
--3 -1 0 1 3 4 
+8 9
+0 1
+1 2
+0 3
+1 3
+2 3
+4 5
+6 5
+5 7
+4 7
 
 Sample Output-2:
 ----------------
-[0, 1, 3, 4]
+6
 
 */
 
@@ -49,25 +67,35 @@ class Solution{
     public static void main(String[] args){
         Scanner s = new Scanner(System.in);
         int n = s.nextInt();
-        int m = s.nextInt();
-        int p = s.nextInt();
-        int[] co = new int[n];
-        for(int i=0;i<n;i++) co[i] = s.nextInt();
-        System.out.println(getNearestPoints(co,m,p));
+        int r = s.nextInt();
+        int[][] routes = new int[r][2];
+        for(int i=0;i<r;i++){
+            routes[i][0] = s.nextInt();
+            routes[i][1] = s.nextInt();
+        }
+        System.out.println(getMaximumReachabilityScore(routes,n));
     }
     
-    static List<Integer> getNearestPoints(int[] co,int m,int p){
-        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>(){
-            public int compare(int[] a,int[] b){
-                return a[1]-b[1];
-            }
-        });
-        for(int i=0;i<co.length;i++){
-            pq.offer(new int[]{co[i],Math.abs(co[i]-p)});
+    static int getMaximumReachabilityScore(int[][] routes,int n){
+        int[][] adjmat = new int[n][n];
+        for(int i=0;i<n;i++) Arrays.fill(adjmat[i],0);
+        int[] deg = new int[n];
+        Arrays.fill(deg,0);
+        for(int i=0;i<routes.length;i++){
+            adjmat[routes[i][0]][routes[i][1]]=1;
+            deg[routes[i][0]]++;
+            adjmat[routes[i][1]][routes[i][0]]=1;
+            deg[routes[i][1]]++;
         }
-        List<Integer> result = new ArrayList<>();
-        while(!pq.isEmpty() && m-->0) result.add(pq.poll()[0]);
-        Collections.sort(result);
-        return result;
+        int max = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i != j){
+                    int sum = deg[i]+deg[j]-((adjmat[i][j] == 1)?(1):(0));
+                    max = Math.max(sum,max);
+                }
+            }
+        }
+        return max;
     }
 }
