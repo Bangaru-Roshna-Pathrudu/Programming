@@ -56,3 +56,24 @@ Sample Output-2:
 
 
 */
+
+import java.util.*;
+
+class Solution{
+    public static void main(String[] args){
+        Scanner s = new Scanner(System.in);
+        String[] dum = s.nextLine().split(",");
+        int[] coins = new int[dum.length];
+        for(int i=0;i<coins.length;i++) coins[i] = Integer.parseInt(dum[i]);
+        System.out.println(remainingCoins(coins));
+    }
+    
+    static int remainingCoins(int[] coins){
+        return helper(0,coins,0,0);
+    }
+    
+    static int helper(int ind,int[] coins,int s1,int s2){
+        if(ind == coins.length) return Math.abs(s1-s2);
+        return Math.min(helper(ind+1,coins,s1+coins[ind],s2),helper(ind+1,coins,s1,s2+coins[ind]));
+    }
+}
