@@ -91,3 +91,40 @@ class Solution{
         return Math.max(helper(t1,t2,ind1,ind2-1),helper(t1,t2,ind1-1,ind2));
     }
 }
+/*
+import java.util.*;
+
+class Solution{
+    
+    static Map<String,Integer> memo = new HashMap<>();
+    
+    public static void main(String[] args){
+        Scanner s = new Scanner(System.in);
+        int m = s.nextInt();
+        int n = s.nextInt();
+        int[] t1 = new int[m];
+        int[] t2 = new int[n];
+        for(int i=0;i<m;i++) t1[i] = s.nextInt();
+        for(int i=0;i<n;i++) t2[i] = s.nextInt();;
+        System.out.println(maxPairsMade(t1,t2));
+    }
+    
+    static int maxPairsMade(int[] t1,int[] t2){
+        return helper(t1,t2,t1.length-1,t2.length-1);
+    }
+    
+    static int helper(int[] t1,int[] t2,int ind1,int ind2){
+        if(ind1 < 0 || ind2 < 0){
+            return 0;
+        }
+        String key = ind1+"-"+ind2;
+        if(memo.containsKey(key)) return memo.get(key);
+        if(t1[ind1] == t2[ind2]){
+            memo.put(key,1+helper(t1,t2,ind1-1,ind2-1));
+            return memo.get(key);
+        }
+        memo.put(key,Math.max(helper(t1,t2,ind1,ind2-1),helper(t1,t2,ind1-1,ind2)));
+        return memo.get(key);
+    }
+}
+*/
