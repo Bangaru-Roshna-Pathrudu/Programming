@@ -1,0 +1,50 @@
+/* 
+Write an SQL query to list the empno,ename,hiredate,curr_date  & exp in 
+the ascending order of the exp [Experience in years].
+
+Sample Output:
+-------------
+empno   ename   hiredate        curr_date       exp                                                                     
+7900    JAMES   2000-06-23      2022-06-22      21                                                                      
+7934    FORD    2000-01-21      2022-06-22      22 
+
+*/
+
+select empno,ename,hiredate,curdate() as curr_date,timestampdiff(year,hiredate,curdate()) as exp from emp order by exp asc;
+
+
+
+-----------------------------------------------------
+
+
+
+/* 
+Write an SQL query to list the empno,ename,annual_sal,daily_sal of all 
+the salesmen in the ascending order of their annual_sal
+
+Sample Output:
+-------------
+empno   ename   annual_sal      daily_sal                                                                               
+7521    ALLEN   15000.00        41.095890                                                                               
+7654    MARTIN  15000.00        41.095890
+
+*/
+
+select empno,ename,sal*12 as annual_sal,(sal*12)/365 as daily_sal from emp where job = 'salesman' order by annual_sal;
+
+
+
+------------------------------------------------------
+
+
+/* 
+Write an SQL query to list the ename and salary of the 5th highest paid employee
+
+Sample Output:
+-------------
+ename   sal                                                                                                             
+CLARK   2450.00
+
+*/
+
+select ename,sal from emp e1 where 4 = (select count(distinct sal) from emp e2 where e2.sal > e1.sal);
